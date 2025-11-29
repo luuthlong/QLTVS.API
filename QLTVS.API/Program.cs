@@ -22,9 +22,9 @@ builder.Services.AddScoped<ITheLoaiDAO, TheLoaiDAO>();
 
 // === ĐĂNG KÝ CÁC LỚP BUSINESS LOGIC (BUS) ===
 // Dòng này là dòng BẮT BUỘC để sửa lỗi "Unable to resolve service for type 'QLTVS.BUS.ITaiLieuBUS'"
-builder.Services.AddScoped<ITaiLieuBUS, TaiLieuBUS>(); 
+builder.Services.AddScoped<ITaiLieuBUS, TaiLieuBUS>();
 // Thêm các BUS khác nếu có:
-builder.Services.AddScoped<ITheLoaiBUS, TheLoaiBUS>();
+builder.Services.AddScoped<ITheLoaiBUS, ITheLoaiBUS>();
 // builder.Services.AddScoped<IPhieuMuonBUS, PhieuMuonBUS>();
 
 builder.Services.AddControllers();
@@ -33,11 +33,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// **Đã loại bỏ 'if (app.Environment.IsDevelopment())' ở đây**
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // KHẮC PHỤC CẢNH BÁO: Bỏ HttpsRedirection vì Railway đã xử lý HTTPS ở tầng ngoài.
 // app.UseHttpsRedirection(); 
@@ -70,12 +68,12 @@ public static class ServiceExtensions
             connectionString = new NpgsqlConnectionStringBuilder
             {
                 Host = uri.Host,
-                // Lỗi CS0019 đã được sửa
                 Port = uri.Port,
                 Username = userInfo[0],
                 Password = userInfo[1],
                 Database = uri.AbsolutePath.TrimStart('/'),
-                SslMode = SslMode.Prefer,
+                // SslMode.Prefer là cần thiết cho các môi trường hosting như Railway
+                SslMode = SslMode.Prefer, 
             }.ToString();
         }
 
