@@ -24,8 +24,7 @@ builder.Services.AddScoped<ITheLoaiDAO, TheLoaiDAO>();
 // Dòng này là dòng BẮT BUỘC để sửa lỗi "Unable to resolve service for type 'QLTVS.BUS.ITaiLieuBUS'"
 builder.Services.AddScoped<ITaiLieuBUS, TaiLieuBUS>();
 // Thêm các BUS khác nếu có:
-builder.Services.AddScoped<ITheLoaiBUS, ITheLoaiBUS>();
-// builder.Services.AddScoped<IPhieuMuonBUS, PhieuMuonBUS>();
+builder.Services.AddScoped<ITheLoaiBUS, TheLoaiBUS>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -73,7 +72,7 @@ public static class ServiceExtensions
                 Password = userInfo[1],
                 Database = uri.AbsolutePath.TrimStart('/'),
                 // SslMode.Prefer là cần thiết cho các môi trường hosting như Railway
-                SslMode = SslMode.Prefer, 
+                SslMode = SslMode.Prefer,
             }.ToString();
         }
 
